@@ -4,15 +4,33 @@ const PORT = 4000;
 
 const app = express();
 
-const gossipMiddleware = (req, res, next) => {
-  console.log(`Someone is going to: ${req.url}`);
+const logger = (req, res, next) => {
+  console.log(`${req.method}: ${req.url}`);
+  next();
+};
+
+const privateMiddleware = (req, res, next) => {
+  const url = req.url;
+  if (url === "/protected") {
+    return res.send("<h1>Not Allowed</h1>");
+  }
+  console.log("Allowed, you may continue");
   next();
 };
 
 const handleHome = (req, res) => {
   return res.send("I love middleware");
 };
-app.get("/", gossipMiddleware, handleHome); //(route, callback)
+
+const handleProtected = (req, res) => {
+  return res.send("Welcome to the private lounge");
+};
+
+app.use(logger); //순서. use(middleware) 먼저, 그다음 get
+//app.use() global middleware. 어느 URL 에도 작동
+app.use(privateMiddleware);
+app.get("/", handleHome); //(route, callback)
+app.get("/protected", handleProtected);
 
 //middleware - request, response 사이의 소프트웨어
 //all handlers(controller) are middlewares, all middlewares are handlers(controller - .ex handleHome/handleLogin)
