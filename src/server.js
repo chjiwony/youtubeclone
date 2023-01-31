@@ -4,16 +4,19 @@ const PORT = 4000;
 
 const app = express();
 
+const gossipMiddleware = (req, res, next) => {
+  console.log(`Someone is going to: ${req.url}`);
+  next();
+};
+
 const handleHome = (req, res) => {
-  return res.send("<h1>I still love you</h1>");
+  return res.send("I love middleware");
 };
-const handleLogin = (req, res) => {
-  return res.send("Login here.");
-  //   return res.send({ message: "Login here." }); JSON 메세지 보내는 법
-};
+app.get("/", gossipMiddleware, handleHome); //(route, callback)
+
+//middleware - request, response 사이의 소프트웨어
+//all handlers(controller) are middlewares, all middlewares are handlers(controller - .ex handleHome/handleLogin)
 //(앞부분-request 오브젝트, 두번째-response 오브젝트)
-app.get("/", handleHome); //(route, callback)
-app.get("/login", handleLogin);
 
 const handleListening = () =>
   console.log(`Server listening on port http://localhost:${PORT} 🚀`);
