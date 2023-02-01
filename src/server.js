@@ -4,40 +4,32 @@ const PORT = 4000;
 
 const app = express();
 
-const logger = (req, res, next) => {
-  console.log(`${req.method}: ${req.url}`);
+const routerLogger = (req, res, next) => {
+  // return res.send("ww");  종결. 다음으로 넘어가지 않는다.
+  console.log(`Path - ${req.path}`);
   next();
 };
 
-const privateMiddleware = (req, res, next) => {
-  const url = req.url;
-  if (url === "/protected") {
-    return res.send("<h1>Not Allowed</h1>");
-  }
-  console.log("Allowed, you may continue");
+const methodLogger = (req, res, next) => {
+  console.log(`Method - ${req.method} URL -  ${req.url}`);
   next();
 };
 
-const handleHome = (req, res) => {
-  return res.send("I love middleware");
+const home = (req, res) => {
+  console.log("I will respond");
+  return res.send("hello");
 };
 
-const handleProtected = (req, res) => {
-  return res.send("Welcome to the private lounge");
+const login = (req, res) => {
+  return res.send("login");
 };
-
-app.use(logger); //순서. use(middleware) 먼저, 그다음 get
-//app.use() global middleware. 어느 URL 에도 작동
-app.use(privateMiddleware);
-app.get("/", handleHome); //(route, callback)
-app.get("/protected", handleProtected);
-
-//middleware - request, response 사이의 소프트웨어
-//all handlers(controller) are middlewares, all middlewares are handlers(controller - .ex handleHome/handleLogin)
-//(앞부분-request 오브젝트, 두번째-response 오브젝트)
+app.use(methodLogger, routerLogger);
+app.get("/", home);
+app.get("/login", login);
+// app.get("/", methodLogger, routerLogger, home);
+// app.get("/login", methodLogger, routerLogger,login);
 
 const handleListening = () =>
   console.log(`Server listening on port http://localhost:${PORT} 🚀`);
 
 app.listen(PORT, handleListening);
-//(포트, 콜백) cont +c 터미널 실행중단
