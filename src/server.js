@@ -1,19 +1,10 @@
 import express from "express";
+import morgan from "morgan";
 
 const PORT = 4000;
 
 const app = express();
-
-const routerLogger = (req, res, next) => {
-  // return res.send("ww");  종결. 다음으로 넘어가지 않는다.
-  console.log(`Path - ${req.path}`);
-  next();
-};
-
-const methodLogger = (req, res, next) => {
-  console.log(`Method - ${req.method} URL -  ${req.url}`);
-  next();
-};
+const logger = morgan("dev");
 
 const home = (req, res) => {
   console.log("I will respond");
@@ -23,11 +14,11 @@ const home = (req, res) => {
 const login = (req, res) => {
   return res.send("login");
 };
-app.use(methodLogger, routerLogger);
+
+// morgan 함수 설정대로 middlelware 를 리턴해준다.
+app.use(logger);
 app.get("/", home);
 app.get("/login", login);
-// app.get("/", methodLogger, routerLogger, home);
-// app.get("/login", methodLogger, routerLogger,login);
 
 const handleListening = () =>
   console.log(`Server listening on port http://localhost:${PORT} 🚀`);
