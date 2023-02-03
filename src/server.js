@@ -6,8 +6,14 @@ import videoRouter from "./routers/videoRouter";
 
 const PORT = 4000;
 
+console.log(process.cwd()); //cwd current working directory - node js 를 시작하는 디렉토리
+
 const app = express();
 const logger = morgan("dev");
+
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+
 app.use(logger);
 
 app.use("/", globalRouter);
