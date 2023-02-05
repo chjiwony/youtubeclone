@@ -1,15 +1,5 @@
 export const trending = (req, res) => {
-  const videos = [
-    {
-      title: "Hello",
-    },
-    {
-      title: "Video #2",
-    },
-    {
-      title: "Whats up",
-    },
-  ];
+  const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return res.render("home", { pageTitle: "Home", videos });
 }; //pug 적용, 괄호 안은 view 이름
 export const see = (req, res) => res.render("watch");
