@@ -1,10 +1,7 @@
-const fakeUser = {
-  username: "Nico",
-  loggedIn: true,
-};
-
-export const trending = (req, res) =>
-  res.render("home", { pageTitle: "Home", fakeUser }); //pug 적용, 괄호 안은 view 이름
+export const trending = (req, res) => {
+  const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  return res.render("home", { pageTitle: "Home", videos });
+}; //pug 적용, 괄호 안은 view 이름
 export const see = (req, res) => res.render("watch");
 // {  return res.render("watch");};
 export const edit = (req, res) => res.render("edit");
