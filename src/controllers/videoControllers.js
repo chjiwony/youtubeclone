@@ -31,13 +31,22 @@ export const trending = (req, res) => {
 export const watch = (req, res) => {
   const { id } = req.params; //const id = req.params.id;
   const video = videos[id - 1];
-  return res.render("watch", { pageTitle: `Watching ${video.title}`, video });
+  return res.render("watch", { pageTitle: `Watching: ${video.title}`, video });
 };
 // {  return res.render("watch");};
-export const edit = (req, res) => res.render("edit");
-export const search = (req, res) => res.send("Search");
-export const upload = (req, res) => res.send("Upload");
-export const deleteVideo = (req, res) => res.send("Delete Video");
+export const getEdit = (req, res) => {
+  //painting the form
+  const { id } = req.params; //const id = req.params.id;
+  const video = videos[id - 1];
+  return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
+};
+export const postEdit = (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+  videos[id - 1].title = title;
+  return res.redirect(`/videos/${id}`);
+  // saving the changes
+};
 
 // export default 는 한 파일에 한개 밖에 할 수 없다.
 // export default 는 import 시 다른 이름으로 해도 상관없다.
