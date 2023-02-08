@@ -48,6 +48,21 @@ export const postEdit = (req, res) => {
   // saving the changes
 };
 
-// export default 는 한 파일에 한개 밖에 할 수 없다.
-// export default 는 import 시 다른 이름으로 해도 상관없다.
-// 그러나 여러 변수를 export 해야 할 때는 못쓴다.
+export const getUpload = (req, res) => {
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
+
+export const postUpload = (req, res) => {
+  // here we will add a video to the videos array.
+  const { title } = req.body;
+  const newVideo = {
+    title,
+    rating: 0,
+    comments: 0,
+    createdAt: "just now",
+    views: 0,
+    id: videos.length + 1,
+  };
+  videos.push(newVideo);
+  return res.redirect("/");
+};
