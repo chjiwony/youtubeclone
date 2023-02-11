@@ -7,7 +7,7 @@
     "url": "git+https://github.com/chjiwony/youtubeclone.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "author": "Jiwon",
   "license": "MIT",
