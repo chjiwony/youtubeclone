@@ -8,9 +8,10 @@ export const home = async (req, res) => {
   return res.render("home", { pageTitle: "Home", videos }); //뒤에 뭐가 실행되지 않게 하기 위해 return 함. return 없어도 된다.
 };
 
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
   const { id } = req.params; //const id = req.params.id;
-  return res.render("watch", { pageTitle: `Watching` });
+  const video = await Video.findById(id);
+  return res.render("watch", { pageTitle: `Watching ${video.title}`, video });
 };
 // {  return res.render("watch");};
 export const getEdit = (req, res) => {

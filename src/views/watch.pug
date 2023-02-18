@@ -2,6 +2,8 @@ extends base.pug
 
 
 block content 
-    h3 #{video.views} #{video.views === 1 ? "view" : "views"}
+    div
+        p=video.description
+        small=video.createdAt 
     a(href=`${video.id}/edit`) Edit Video &rarr; 
     //- /edit  하면 절대 URL 으로 홈화면에서 /edit 로 가는데, 그냥 edit 쓰면 상대URL로 지금 작성한 곳에서 더 붙여서 하위로 간다
