@@ -41,10 +41,6 @@ export const postUpload = async (req, res) => {
       description,
 
       hashtags: hashtags.split(",").map((word) => `#${word}`),
-      meta: {
-        views: 0,
-        rating: 0,
-      },
     });
     // await video.save();
     // 방법1 JS 오브젝트를 만들고 저장
