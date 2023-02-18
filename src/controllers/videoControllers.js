@@ -35,19 +35,24 @@ export const postUpload = async (req, res) => {
   // here we will add a video to the videos array.
   const { title, description, hashtags } = req.body;
   //방법2 오브젝트 따로 안만들고 자동생성, 그러나 에러발생가능 try/error
-  await Video.create({
-    // const video = new Video({
-    //document 생성 videoSchema
-    title: title, //title,
-    description,
-    createdAt: Date.now(),
-    hashtags: hashtags.split(",").map((word) => `#${word}`),
-    meta: {
-      views: 0,
-      rating: 0,
-    },
-  });
-  // await video.save();
-  // 방법1 JS 오브젝트를 만들고 저장
-  return res.redirect("/");
+  try {
+    await Video.create({
+      title,
+      description,
+
+      hashtags: hashtags.split(",").map((word) => `#${word}`),
+      meta: {
+        views: 0,
+        rating: 0,
+      },
+    });
+    // await video.save();
+    // 방법1 JS 오브젝트를 만들고 저장
+    return res.redirect("/");
+  } catch (error) {
+    return res.render("upload", {
+      pageTitle: "Upload Video",
+      errorMessage: error._message,
+    });
+  }
 };
