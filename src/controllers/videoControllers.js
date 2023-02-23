@@ -1,7 +1,7 @@
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({});
+  const videos = await Video.find({}).sort({ createdAt: "asc" });
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -63,4 +63,25 @@ export const deleteVideo = async (req, res) => {
   await Video.findByIdAndDelete(id);
   //delete video
   return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`^${keyword}`, "i"), //정규식, i 는 대소문자 무시 ^시작 끝$
+
+        // $gt: 3  greater than 3
+      },
+    });
+  }
+  // if (keyword) {
+  //   const videos = await Video.find({
+  //     title: keyword,
+  //   });
+  //   return res.render("search", { pageTitle: "Search", videos });
+  // }
+  return res.render("search", { pageTitle: "Search", videos });
 };
