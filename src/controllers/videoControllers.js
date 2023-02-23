@@ -1,4 +1,4 @@
-import Video from "../models/Video";
+import Video, { formatHashtags } from "../models/Video";
 
 export const home = async (req, res) => {
   const videos = await Video.find({});
@@ -26,19 +26,15 @@ export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
   const video = await Video.exists({ _id: id });
-  // const video = await Video.findById(id);
   if (!video) {
     return res.render("404", { pageTitle: "Video not found" });
   }
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags
-      .split(",")
-      .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+    hashtags: formatHashtags(hashtags),
   });
   return res.redirect(`/videos/${id}`);
-  // saving the changes
 };
 
 export const getUpload = (req, res) => {
@@ -46,18 +42,13 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  // here we will add a video to the videos array.
   const { title, description, hashtags } = req.body;
-  //방법2 오브젝트 따로 안만들고 자동생성, 그러나 에러발생가능 try/error
   try {
     await Video.create({
       title,
       description,
-
-      hashtags: hashtags.split(",").map((word) => `#${word}`),
+      hashtags: formatHashtags(hashtags),
     });
-    // await video.save();
-    // 방법1 JS 오브젝트를 만들고 저장
     return res.redirect("/");
   } catch (error) {
     return res.render("upload", {
