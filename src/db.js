@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/youtubeclone");
+mongoose.connect("mongodb://127.0.0.1:27017/youtubeclone", {});
 
 const db = mongoose.connection;
 
