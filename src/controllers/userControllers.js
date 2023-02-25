@@ -56,7 +56,8 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong password",
     });
   }
-  console.log("LOg User In! Coming Soon!");
+  req.session.loggedIn = true; // 로그인한 유저 정보 저장
+  req.session.user = user; //모든 데이터의 user , 위의 const
   return res.redirect("/");
 };
 //   res.render("login", { pageTitle: "Login" });
