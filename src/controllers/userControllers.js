@@ -202,14 +202,13 @@ export const postChangePassword = async (req, res) => {
 
 export const see = async (req, res) => {
   const { id } = req.params; // public 노출된 아이디를 가져옴
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("videos");
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
-  const videos = await Video.find({ owner: user._id });
+
   return res.render("users/profile", {
     pageTitle: `Profile of ${user.name}`,
     user,
-    videos,
   });
 };
