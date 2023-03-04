@@ -18,6 +18,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"], //마지막으로 적용되는 것을 제일 앞에, 인스톨 먼저
+      },
     ],
   },
 };
