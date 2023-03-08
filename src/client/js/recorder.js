@@ -12,21 +12,38 @@ const handleDownload = async () => {
 
   ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile)); //FIle System
 
-  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
-
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4"); // 프레임 60
+  await ffmpeg.run(
+    "-i",
+    "recording.webm",
+    "-ss", // 특정 부분으로 가게함
+    "00:00:01",
+    "-frames:v", //첫번째 프레임을 스크린샷 1장
+    "1",
+    "thumbnail.jpg"
+  );
   const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg");
 
   const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" }); //바이너리 데이터를 사용하려면 버프를 사용해야 한다
+  const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
 
   const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbUrl = URL.createObjectURL(thumbBlob);
 
   const a = document.createElement("a"); //페이크 다운로드 링크 만들기
-
   a.href = mp4Url;
   a.download = "MyRecording.mp4";
   document.body.appendChild(a);
   a.click();
+
+  const thumbA = document.createElement("a");
+  thumbA.href = thumbUrl;
+  thumbA.download = "MyThumbnail.jpg";
+  document.body.appendChild(thumbA);
+  thumbA.click();
 };
+
 const handleStop = () => {
   startBtn.innerText = "Download Recording";
   startBtn.removeEventListener("click", handleStop);
