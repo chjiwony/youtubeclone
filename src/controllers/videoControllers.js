@@ -146,5 +146,5 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id); // 다른 SQL은 자동으로 달아주지만, 몽고DB는 꼭 이렇게 id 달아줘야한다.
   video.save();
-  return res.sendStatus(201);
+  return res.status(201).json({ newCommentId: comment._id });
 };
