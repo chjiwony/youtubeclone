@@ -93,12 +93,12 @@ const handleMouseMove = () => {
 const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
-const handleKeydown = (event) => {
-  if (event.code === "Space") {
-    handlePlayClick();
-    event.preventDefault();
-  }
-};
+// const handleKeydown = (event) => {
+//   if (event.code === "Space") {
+//     handlePlayClick();
+//     event.preventDefault();
+//   }
+// };
 const handleVideoClickPlay = () => {
   handlePlayClick();
 };
