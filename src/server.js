@@ -17,6 +17,7 @@ app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); //.text 를 하면 그냥 받으면 활용을 못하고, array로 받으면 object 로 되어 버려 활용 못한다.
 
 app.use(
   session({

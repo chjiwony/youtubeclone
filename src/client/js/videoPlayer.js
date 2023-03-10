@@ -94,7 +94,6 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 const handleKeydown = (event) => {
-  console.log(event);
   if (event.code === "Space") {
     handlePlayClick();
     event.preventDefault();

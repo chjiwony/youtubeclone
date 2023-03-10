@@ -81,7 +81,6 @@ export const postUpload = async (req, res) => {
     user.save();
     return res.redirect("/");
   } catch (error) {
-    console.log(error);
     return res.status(400).render("upload", {
       pageTitle: "Upload Video",
       errorMessage: error._message,
@@ -131,5 +130,6 @@ export const registerView = async (req, res) => {
 export const createComment = (req, res) => {
   console.log(req.params);
   console.log(req.body);
+  console.log(req.body.text, req.body.rating);
   return res.end();
 };
