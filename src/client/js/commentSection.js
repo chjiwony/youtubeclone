@@ -17,6 +17,7 @@ const handleSubmit = (event) => {
     },
     body: JSON.stringify({ text }), //프론트엔드에서 array로 저장 , 백엔드에서 처리는 JSON.parse 로 각 값 object 화 구별
   });
+  textarea.value = ""; //커멘트 비우기
 };
 if (form) {
   form.addEventListener("submit", handleSubmit);
