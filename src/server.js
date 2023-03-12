@@ -4,8 +4,8 @@ import session from "express-session";
 import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
-import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import userRouter from "./routers/userRouter";
 import apiRouter from "./routers/apiRouter";
 import { localsMiddleware } from "./middlewares";
 
@@ -14,23 +14,17 @@ const logger = morgan("dev");
 
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
-
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); //.text 를 하면 그냥 받으면 활용을 못하고, array로 받으면 object 로 되어 버려 활용 못한다.
-
+app.use(express.json());
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    // cookie: {maxAge: 20000000,},
-    store: MongoStore.create({
-      mongoUrl: process.env.DB_URL,
-    }),
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
-
 app.use(flash());
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));

@@ -1,6 +1,8 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
+import { async } from "regenerator-runtime";
+import session from "express-session";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -12,7 +14,6 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
-  console.log(video);
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
@@ -147,4 +148,48 @@ export const createComment = async (req, res) => {
   video.comments.push(comment._id); // 다른 SQL은 자동으로 달아주지만, 몽고DB는 꼭 이렇게 id 달아줘야한다.
   video.save();
   return res.status(201).json({ newCommentId: comment._id });
+};
+// export const deleteComment = async (req, res) => {
+//   const {
+//     body: { id: commentId },
+//     session: {
+//       user: { _id: userId },
+//     },
+//   } = req;
+//   const comment = await Comment.findById(commentId);
+//   if (!comment) {
+//     req.flash("error", "There is no comment");
+//     return res.sendStatus("404");
+//   }
+//   if (String(comment.owner) !== String(_id)) {
+//     req.flash("error", "You are not the author");
+//     return res.sendStatus("404");
+//   }
+//   await Comment.findByIdAndDelete(commentId);
+//   return res.sendStatus("200");
+// };
+export const deleteComment = async (req, res) => {
+  const {
+    session: { user: sessionUser },
+    params: { id },
+  } = req;
+  const comment = await Comment.findById(id);
+  const video = await Video.findById(comment.video);
+  const user = await User.findById(sessionUser._id);
+
+  if (!video || !user) {
+    return res.sendStatus(404);
+  }
+
+  if (user._id.toString() !== comment.owner.toString()) {
+    return res.sendStatus(404);
+  }
+
+  await Comment.findByIdAndDelete(id);
+  video.comments.splice(video.comments.indexOf(id), 1);
+  video.save();
+  user.comments.splice(user.comments.indexOf(id), 1);
+  user.save();
+
+  return res.sendStatus(200);
 };
